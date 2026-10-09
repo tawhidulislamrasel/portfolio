@@ -226,6 +226,49 @@
 </section>
 @endif
 
+<!-- 4.1 Education & Academic Degrees -->
+@if ((!isset($sections['education']) || $sections['education']->is_enabled) && $educations->count() > 0)
+<section id="education" class="py-20 px-6 relative border-t border-slate-800/60 bg-slate-950/60">
+    <div class="max-w-5xl mx-auto space-y-12">
+        <div class="text-center max-w-2xl mx-auto space-y-4">
+            <span class="text-xs font-mono text-cyan-400 uppercase tracking-widest">{{ $sections['education']->subtitle ?? 'Academic Foundation' }}</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">{{ $sections['education']->title ?? 'Education & Academic Degrees' }}</h2>
+        </div>
+
+        <div class="grid grid-cols-1 {{ $educations->count() > 1 ? 'md:grid-cols-2' : 'max-w-2xl mx-auto' }} gap-8">
+            @foreach ($educations as $edu)
+                <div class="bg-slate-900/80 border border-slate-800 p-8 rounded-3xl space-y-5 hover:border-cyan-500/40 transition shadow-2xl relative overflow-hidden group">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0">
+                            <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800 shrink-0">
+                            {{ $edu->start_date }} — {{ $edu->end_date ?? 'Present' }}
+                        </span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <h3 class="text-lg font-bold text-white group-hover:text-cyan-400 transition">{{ $edu->degree }}</h3>
+                        <div class="text-xs font-semibold text-cyan-400">{{ $edu->institution }}</div>
+                    </div>
+
+                    @if(!empty($edu->field_of_study))
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-slate-950 border border-slate-800 text-xs text-slate-300 font-mono">
+                            <i data-lucide="book-open" class="w-3.5 h-3.5 text-cyan-400"></i>
+                            <span>{{ $edu->field_of_study }}</span>
+                        </div>
+                    @endif
+
+                    @if(!empty($edu->summary))
+                        <p class="text-xs text-slate-300 leading-relaxed pt-3 border-t border-slate-800/80">{{ $edu->summary }}</p>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+@endif
+
 <!-- 5. Featured Projects Showcase -->
 @if (isset($sections['projects']) && $sections['projects']->is_enabled)
 <section id="projects" class="py-24 px-6 relative border-t border-slate-800/60">

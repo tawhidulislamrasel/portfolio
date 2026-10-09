@@ -121,6 +121,7 @@
                 <a href="{{ route('home') }}#about" class="hover:text-blue-400 transition">About</a>
                 <a href="{{ route('home') }}#expertise" class="hover:text-blue-400 transition">Expertise</a>
                 <a href="{{ route('home') }}#career" class="hover:text-blue-400 transition">Career</a>
+                <a href="{{ route('home') }}#education" class="hover:text-blue-400 transition">Education</a>
                 <a href="{{ route('home') }}#projects" class="hover:text-blue-400 transition">Case Studies</a>
                 <a href="{{ route('home') }}#achievements" class="hover:text-blue-400 transition">Impact</a>
                 <a href="{{ route('blog.index') }}" class="hover:text-blue-400 transition">Blog</a>
@@ -157,6 +158,7 @@
                 <a href="{{ route('home') }}#about" class="hover:text-blue-400 py-1 transition">About</a>
                 <a href="{{ route('home') }}#expertise" class="hover:text-blue-400 py-1 transition">Expertise</a>
                 <a href="{{ route('home') }}#career" class="hover:text-blue-400 py-1 transition">Career</a>
+                <a href="{{ route('home') }}#education" class="hover:text-blue-400 py-1 transition">Education</a>
                 <a href="{{ route('home') }}#projects" class="hover:text-blue-400 py-1 transition">Case Studies</a>
                 <a href="{{ route('home') }}#achievements" class="hover:text-blue-400 py-1 transition">Impact</a>
                 <a href="{{ route('blog.index') }}" class="hover:text-blue-400 py-1 transition">Blog</a>

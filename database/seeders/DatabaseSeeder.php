@@ -192,6 +192,16 @@ class DatabaseSeeder extends Seeder
                 'order_column' => 8,
                 'is_enabled' => true,
             ],
+            [
+                'key' => 'education',
+                'name' => 'Education & Degrees',
+                'type' => 'education',
+                'title' => 'Academic Foundation & Education',
+                'subtitle' => 'Degrees, Field of Study & Academic Excellence',
+                'content' => 'Formal computer science degree, certifications, and academic specialization.',
+                'order_column' => 9,
+                'is_enabled' => true,
+            ],
         ];
 
         foreach ($sections as $s) {

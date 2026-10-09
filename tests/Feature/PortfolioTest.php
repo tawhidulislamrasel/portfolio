@@ -283,4 +283,47 @@ class PortfolioTest extends TestCase
             unlink($testFilePath);
         }
     }
+
+    /** @test */
+    public function admin_can_update_profile_name_email_and_password()
+    {
+        $admin = User::where('email', 'admin@example.com')->first();
+
+        $response = $this->actingAs($admin)->put(route('admin.profile.update'), [
+            'name' => 'Alexander Vance Lead',
+            'email' => 'admin.new@example.com',
+            'current_password' => 'password',
+            'new_password' => 'newsecret123',
+            'new_password_confirmation' => 'newsecret123',
+        ]);
+
+        $response->assertRedirect(route('admin.profile.edit'));
+        $response->assertSessionHas('success');
+
+        $admin->refresh();
+        $this->assertEquals('Alexander Vance Lead', $admin->name);
+        $this->assertEquals('admin.new@example.com', $admin->email);
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('newsecret123', $admin->password));
+    }
+
+    /** @test */
+    public function admin_can_create_new_skill_group_and_skills()
+    {
+        $admin = User::where('email', 'admin@example.com')->first();
+
+        $response = $this->actingAs($admin)->post(route('admin.skills.store'), [
+            'name' => 'Rust Systems Programming',
+            'category' => 'Systems & Low-Level Architecture',
+            'proficiency_percentage' => 85,
+            'icon' => 'cpu',
+            'is_featured' => 1,
+            'order_column' => 1,
+        ]);
+
+        $response->assertRedirect(route('admin.skills.index'));
+        $this->assertDatabaseHas('skills', [
+            'name' => 'Rust Systems Programming',
+            'category' => 'Systems & Low-Level Architecture',
+        ]);
+    }
 }

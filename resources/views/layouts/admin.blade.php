@@ -114,20 +114,24 @@
                     <i data-lucide="settings" class="w-4 h-4"></i>
                     Global Settings
                 </a>
+                <a href="{{ route('admin.profile.edit') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg transition {{ request()->routeIs('admin.profile.*') ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30 font-semibold' : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200' }}">
+                    <i data-lucide="user-cog" class="w-4 h-4"></i>
+                    Admin Profile & Password
+                </a>
             </nav>
         </div>
 
         <!-- Footer User Profile (Fixed at bottom) -->
         <div class="p-4 border-t border-slate-800 flex items-center justify-between shrink-0 bg-slate-900/90">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-bold text-slate-300">
+            <a href="{{ route('admin.profile.edit') }}" class="flex items-center gap-3 hover:opacity-80 transition group truncate">
+                <div class="w-9 h-9 rounded-full bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-slate-300">
                     {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                 </div>
                 <div class="truncate text-xs">
-                    <div class="font-bold text-slate-200 truncate">{{ Auth::user()->name }}</div>
+                    <div class="font-bold text-slate-200 group-hover:text-blue-400 transition truncate">{{ Auth::user()->name }}</div>
                     <div class="text-slate-400 truncate">{{ Auth::user()->email }}</div>
                 </div>
-            </div>
+            </a>
             <form action="{{ route('admin.logout') }}" method="POST">
                 @csrf
                 <button type="submit" title="Logout" class="p-2 text-slate-400 hover:text-red-400 transition">

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\ExperienceController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProjectController as AdminProjectController;
 use App\Http\Controllers\Admin\SceneSettingController;
 use App\Http\Controllers\Admin\SectionController;
@@ -76,6 +77,10 @@ Route::post('/admin/logout', [LoginController::class, 'logout'])->name('admin.lo
 */
 Route::middleware(['auth', EnsureAdminUser::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Admin Profile & Security Settings
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Global Settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

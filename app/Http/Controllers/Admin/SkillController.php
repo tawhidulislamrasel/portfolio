@@ -13,13 +13,16 @@ class SkillController extends Controller
     public function index()
     {
         $skills = Skill::orderBy('order_column')->get();
+        $categories = Skill::select('category')->distinct()->pluck('category')->filter()->values();
 
-        return view('admin.skills.index', compact('skills'));
+        return view('admin.skills.index', compact('skills', 'categories'));
     }
 
     public function create()
     {
-        return view('admin.skills.create');
+        $categories = Skill::select('category')->distinct()->pluck('category')->filter()->values();
+
+        return view('admin.skills.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -35,7 +38,7 @@ class SkillController extends Controller
 
         $skill = Skill::create([
             'name' => $validated['name'],
-            'category' => $validated['category'],
+            'category' => trim($validated['category']),
             'proficiency_percentage' => $validated['proficiency_percentage'],
             'icon' => $validated['icon'] ?? 'code-2',
             'is_featured' => $request->boolean('is_featured'),
@@ -45,16 +48,18 @@ class SkillController extends Controller
         ActivityLog::create([
             'user_id' => Auth::id(),
             'action' => 'create_skill',
-            'description' => 'Added technical skill: '.$skill->name,
+            'description' => 'Added technical skill: '.$skill->name.' to group: '.$skill->category,
             'ip_address' => $request->ip(),
         ]);
 
-        return redirect()->route('admin.skills.index')->with('success', 'Skill added successfully.');
+        return redirect()->route('admin.skills.index')->with('success', 'Skill added successfully to group "'.$skill->category.'".');
     }
 
     public function edit(Skill $skill)
     {
-        return view('admin.skills.edit', compact('skill'));
+        $categories = Skill::select('category')->distinct()->pluck('category')->filter()->values();
+
+        return view('admin.skills.edit', compact('skill', 'categories'));
     }
 
     public function update(Request $request, Skill $skill)

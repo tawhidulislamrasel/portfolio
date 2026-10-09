@@ -36,15 +36,20 @@ $directories = [
     $tmpStorage . '/logs',
     $tmpStorage . '/app',
     $tmpStorage . '/app/public',
+    $tmpStorage . '/app/public/portfolio',
+    $tmpStorage . '/app/public/branding',
+    $tmpStorage . '/app/public/resumes',
+    $tmpStorage . '/app/public/posts',
 ];
 
 foreach ($directories as $dir) {
     if (!is_dir($dir)) {
-        @mkdir($dir, 0755, true);
+        @mkdir($dir, 0777, true);
     }
+    @chmod($dir, 0777);
 }
 
-// 5. Prepare SQLite Database in /tmp
+// 5. Prepare SQLite Database in /tmp with full 0777 permissions
 $tmpDb = '/tmp/database.sqlite';
 $sourceDb = __DIR__ . '/../database/database.sqlite';
 
@@ -55,12 +60,13 @@ if (!file_exists($tmpDb) || filesize($tmpDb) === 0) {
         @touch($tmpDb);
     }
 }
+@chmod($tmpDb, 0777);
 
 // 6. Set Essential Vercel Serverless Environment Variables
 $envVars = [
     'APP_KEY' => getenv('APP_KEY') ?: 'base64:pFt8202m8C+z3iaeg0u2ts0+GQRua3nVhN0SGqVWeQc=',
     'APP_ENV' => getenv('APP_ENV') ?: 'production',
-    'APP_DEBUG' => getenv('APP_DEBUG') ?: 'false',
+    'APP_DEBUG' => getenv('APP_DEBUG') ?: 'true',
     'VIEW_COMPILED_PATH' => $tmpStorage . '/framework/views',
     'APP_SERVICES_CACHE' => $tmpStorage . '/services.php',
     'APP_PACKAGES_CACHE' => $tmpStorage . '/packages.php',

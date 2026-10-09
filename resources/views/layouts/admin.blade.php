@@ -17,6 +17,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+<body class="h-full flex overflow-hidden font-sans bg-slate-950 text-slate-200">
     <!-- Mobile Sidebar Backdrop Overlay -->
     <div id="admin-sidebar-backdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 hidden md:hidden"></div>
 

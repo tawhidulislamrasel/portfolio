@@ -33,6 +33,8 @@ class SettingController extends Controller
             'seo_title' => 'nullable|string|max:255',
             'seo_description' => 'nullable|string',
             'seo_keywords' => 'nullable|string',
+            'copyright_text' => 'nullable|string|max:255',
+            'footer_subtext' => 'nullable|string|max:255',
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
             'resume_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
             'site_logo' => 'nullable|file|mimes:jpeg,png,jpg,webp,svg,ico|max:4096',
@@ -62,7 +64,7 @@ class SettingController extends Controller
         $textFields = [
             'site_name', 'owner_name', 'owner_title', 'bio', 'contact_email',
             'contact_phone', 'location', 'github_url', 'linkedin_url', 'twitter_url',
-            'seo_title', 'seo_description', 'seo_keywords',
+            'seo_title', 'seo_description', 'seo_keywords', 'copyright_text', 'footer_subtext',
         ];
 
         foreach ($textFields as $field) {

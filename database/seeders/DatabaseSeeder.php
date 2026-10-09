@@ -53,6 +53,8 @@ class DatabaseSeeder extends Seeder
             'seo_title' => 'Alexander Vance - Senior Software Engineer & Team Lead Portfolio',
             'seo_description' => 'Explore the interactive 3D portfolio of Alexander Vance, a Senior Software Engineer specializing in distributed system architecture, high-performance web applications, and technical team leadership.',
             'seo_keywords' => 'Senior Software Engineer, Laravel, Three.js, WebGL, Software Architect, Engineering Manager, SaaS Developer',
+            'copyright_text' => '© '.date('Y').' Alexander Vance. All rights reserved.',
+            'footer_subtext' => 'Built with Laravel 12, SQLite, Three.js WebGL, GSAP & Tailwind CSS.',
         ];
 
         foreach ($settings as $key => $val) {

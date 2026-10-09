@@ -141,6 +141,24 @@
             </div>
         </div>
 
+        <div class="pt-4 border-t border-slate-800 space-y-4">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider">Footer Settings & Copyright</h3>
+
+            <div>
+                <label for="copyright_text" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Footer Copyright Text</label>
+                <input type="text" name="copyright_text" id="copyright_text" value="{{ old('copyright_text', $settings['copyright_text'] ?? '') }}" placeholder="e.g. © 2026 Tawhidul Islam. All rights reserved."
+                    class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm">
+                <p class="text-xs text-slate-500 mt-1">Leave empty to default to: © {{ date('Y') }} {{ $settings['owner_name'] ?? 'Alexander Vance' }}. All rights reserved.</p>
+            </div>
+
+            <div>
+                <label for="footer_subtext" class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Footer Subtext / Built With Tagline</label>
+                <input type="text" name="footer_subtext" id="footer_subtext" value="{{ old('footer_subtext', $settings['footer_subtext'] ?? '') }}" placeholder="e.g. Built with Laravel 12, Three.js WebGL & Tailwind CSS."
+                    class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 text-sm">
+                <p class="text-xs text-slate-500 mt-1">Leave empty to default to: Built with Laravel 12, SQLite, Three.js WebGL, GSAP & Tailwind CSS.</p>
+            </div>
+        </div>
+
         <div class="pt-4 flex justify-end">
             <button type="submit" class="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-white text-sm shadow-lg shadow-blue-500/25 transition">
                 Save Global Settings

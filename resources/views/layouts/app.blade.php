@@ -181,8 +181,8 @@
     <footer class="relative z-10 border-t border-slate-800/80 bg-slate-950 py-12 text-slate-400 text-xs">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-                <p class="font-medium text-slate-300">© {{ date('Y') }} {{ $settings['owner_name'] ?? 'Alexander Vance' }}. All rights reserved.</p>
-                <p class="text-slate-500 mt-1">Built with Laravel 11, SQLite, Three.js WebGL, GSAP & Tailwind CSS.</p>
+                <p class="font-medium text-slate-300">{{ $settings['copyright_text'] ?? ('© ' . date('Y') . ' ' . ($settings['owner_name'] ?? 'Alexander Vance') . '. All rights reserved.') }}</p>
+                <p class="text-slate-500 mt-1">{{ $settings['footer_subtext'] ?? 'Built with Laravel 12, SQLite, Three.js WebGL, GSAP & Tailwind CSS.' }}</p>
             </div>
             <div class="flex items-center gap-6 text-sm">
                 <a href="{{ route('blog.index') }}" class="hover:text-blue-400 transition flex items-center gap-1.5">

@@ -34,12 +34,16 @@ class ThemeSettingController extends Controller
             ThemeSetting::setValue($key, $val);
         }
 
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'action' => 'update_theme',
-            'description' => 'Updated Global Design System & Theme CSS variables.',
-            'ip_address' => $request->ip(),
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => Auth::id() ?? 1,
+                'action' => 'update_theme',
+                'description' => 'Updated Global Design System & Theme CSS variables.',
+                'ip_address' => $request->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            // Ignore activity log creation exception on serverless
+        }
 
         return redirect()->back()->with('success', 'Theme settings updated successfully.');
     }

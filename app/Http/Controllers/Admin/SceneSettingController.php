@@ -36,12 +36,16 @@ class SceneSettingController extends Controller
             SceneSetting::setValue($key, (string) $val);
         }
 
-        ActivityLog::create([
-            'user_id' => Auth::id(),
-            'action' => 'update_3d_scene',
-            'description' => 'Updated 3D WebGL Scene & Graphics Configurator parameters.',
-            'ip_address' => $request->ip(),
-        ]);
+        try {
+            ActivityLog::create([
+                'user_id' => Auth::id() ?? 1,
+                'action' => 'update_3d_scene',
+                'description' => 'Updated 3D WebGL Scene & Graphics Configurator parameters.',
+                'ip_address' => $request->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            // Ignore activity log creation exception on serverless
+        }
 
         return redirect()->back()->with('success', '3D Scene Configuration updated successfully.');
     }

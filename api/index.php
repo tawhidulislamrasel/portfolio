@@ -1,11 +1,24 @@
 <?php
 
-// 1. Set VERCEL environment flag
+// 1. Enable full error reporting & display for debugging Vercel deployments
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+// 2. Set VERCEL environment flag
 putenv('VERCEL=1');
 $_ENV['VERCEL'] = '1';
 $_SERVER['VERCEL'] = '1';
 
-// 2. Prepare required writable /tmp directory structure for Vercel Lambda environment
+// 3. Check if vendor/autoload.php exists
+if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    http_response_code(500);
+    echo "<h1>Vercel Deployment Error</h1>";
+    echo "<p>The <code>vendor/autoload.php</code> file was not found. Composer dependencies were not installed during build.</p>";
+    exit(1);
+}
+
+// 4. Prepare required writable /tmp directory structure for Vercel Lambda environment
 $tmpStorage = '/tmp/storage';
 $directories = [
     $tmpStorage,
@@ -25,7 +38,7 @@ foreach ($directories as $dir) {
     }
 }
 
-// 3. Prepare SQLite Database in /tmp
+// 5. Prepare SQLite Database in /tmp
 $tmpDb = '/tmp/database.sqlite';
 $sourceDb = __DIR__ . '/../database/database.sqlite';
 if (!file_exists($tmpDb) || filesize($tmpDb) === 0) {
@@ -36,7 +49,7 @@ if (!file_exists($tmpDb) || filesize($tmpDb) === 0) {
     }
 }
 
-// 4. Set Essential Vercel Serverless Environment Variables
+// 6. Set Essential Vercel Serverless Environment Variables
 $envVars = [
     'APP_KEY' => getenv('APP_KEY') ?: 'base64:pFt8202m8C+z3iaeg0u2ts0+GQRua3nVhN0SGqVWeQc=',
     'APP_ENV' => getenv('APP_ENV') ?: 'production',
@@ -59,5 +72,13 @@ foreach ($envVars as $key => $value) {
     $_SERVER[$key] = $value;
 }
 
-// 5. Forward to Laravel front controller
-require __DIR__ . '/../public/index.php';
+// 7. Forward request to Laravel front controller with Exception boundary
+try {
+    require __DIR__ . '/../public/index.php';
+} catch (\Throwable $e) {
+    http_response_code(500);
+    echo "<h1>Unhandled Application Exception</h1>";
+    echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>File:</strong> " . htmlspecialchars($e->getFile()) . " line " . $e->getLine() . "</p>";
+    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+}

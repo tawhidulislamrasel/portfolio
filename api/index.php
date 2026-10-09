@@ -88,8 +88,13 @@ foreach ($envVars as $key => $value) {
 // 7. Auto-migrate and seed if database tables are missing
 try {
     $pdo = new PDO("sqlite:" . $tmpDb);
+    $pdo->exec("PRAGMA busy_timeout = 5000;");
+    $pdo->exec("PRAGMA journal_mode = WAL;");
     $stmt = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='settings'");
     $hasSettingsTable = $stmt && $stmt->fetchColumn();
+    $stmt = null;
+    $pdo = null;
+
     if (!$hasSettingsTable) {
         require_once __DIR__ . '/../vendor/autoload.php';
         $app = require __DIR__ . '/../bootstrap/app.php';

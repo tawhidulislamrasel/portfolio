@@ -6,11 +6,39 @@
       "use": "vercel-php@0.7.3"
     },
     {
-      "src": "public/**",
+      "src": "public/build/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/storage/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/favicon.ico",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/robots.txt",
       "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/build/(.*)",
+      "dest": "/public/build/$1"
+    },
+    {
+      "src": "/storage/(.*)",
+      "dest": "/public/storage/$1"
+    },
+    {
+      "src": "/favicon.ico",
+      "dest": "/public/favicon.ico"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "/public/robots.txt"
+    },
     {
       "src": "/(.*)",
       "dest": "/api/index.php"

@@ -5,10 +5,16 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
-// 2. Set VERCEL environment flag
+// 2. Set VERCEL environment & HTTPS flags
 putenv('VERCEL=1');
 $_ENV['VERCEL'] = '1';
 $_SERVER['VERCEL'] = '1';
+$_SERVER['HTTPS'] = 'on';
+$_SERVER['SERVER_PORT'] = '443';
+
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+    $_SERVER['HTTPS'] = 'on';
+}
 
 // 3. Check if vendor/autoload.php exists
 if (!file_exists(__DIR__ . '/../vendor/autoload.php')) {

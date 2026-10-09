@@ -41,6 +41,7 @@ foreach ($directories as $dir) {
 // 5. Prepare SQLite Database in /tmp
 $tmpDb = '/tmp/database.sqlite';
 $sourceDb = __DIR__ . '/../database/database.sqlite';
+
 if (!file_exists($tmpDb) || filesize($tmpDb) === 0) {
     if (file_exists($sourceDb) && filesize($sourceDb) > 0) {
         @copy($sourceDb, $tmpDb);
@@ -53,7 +54,7 @@ if (!file_exists($tmpDb) || filesize($tmpDb) === 0) {
 $envVars = [
     'APP_KEY' => getenv('APP_KEY') ?: 'base64:pFt8202m8C+z3iaeg0u2ts0+GQRua3nVhN0SGqVWeQc=',
     'APP_ENV' => getenv('APP_ENV') ?: 'production',
-    'APP_DEBUG' => getenv('APP_DEBUG') ?: 'true',
+    'APP_DEBUG' => getenv('APP_DEBUG') ?: 'false',
     'VIEW_COMPILED_PATH' => $tmpStorage . '/framework/views',
     'APP_SERVICES_CACHE' => $tmpStorage . '/services.php',
     'APP_PACKAGES_CACHE' => $tmpStorage . '/packages.php',
@@ -72,7 +73,24 @@ foreach ($envVars as $key => $value) {
     $_SERVER[$key] = $value;
 }
 
-// 7. Forward request to Laravel front controller with Exception boundary
+// 7. Auto-migrate and seed if database tables are missing
+try {
+    $pdo = new PDO("sqlite:" . $tmpDb);
+    $stmt = $pdo->query("SELECT name FROM sqlite_master WHERE type='table' AND name='settings'");
+    $hasSettingsTable = $stmt && $stmt->fetchColumn();
+    if (!$hasSettingsTable) {
+        require_once __DIR__ . '/../vendor/autoload.php';
+        $app = require __DIR__ . '/../bootstrap/app.php';
+        $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+        $kernel->bootstrap();
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    }
+} catch (\Throwable $e) {
+    // Continue to front controller even if auto-migration check completes
+}
+
+// 8. Forward request to Laravel front controller with Exception boundary
 try {
     require __DIR__ . '/../public/index.php';
 } catch (\Throwable $e) {

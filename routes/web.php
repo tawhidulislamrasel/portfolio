@@ -36,6 +36,31 @@ Route::post('/contact', [ContactController::class, 'submit'])->name('contact.sub
 
 /*
 |--------------------------------------------------------------------------
+| Dynamic Storage / Media Asset Delivery (Vercel Serverless Compatible)
+|--------------------------------------------------------------------------
+*/
+Route::get('/storage/{path}', function ($path) {
+    $cleanPath = ltrim(str_replace(['..', "\0"], '', $path), '/');
+
+    $candidates = [
+        '/tmp/storage/app/public/' . $cleanPath,
+        storage_path('app/public/' . $cleanPath),
+        public_path('storage/' . $cleanPath),
+    ];
+
+    foreach ($candidates as $filePath) {
+        if (file_exists($filePath) && is_file($filePath)) {
+            return response()->file($filePath, [
+                'Cache-Control' => 'public, max-age=31536000',
+            ]);
+        }
+    }
+
+    abort(404);
+})->where('path', '.*')->name('storage.serve');
+
+/*
+|--------------------------------------------------------------------------
 | Admin Auth Routes
 |--------------------------------------------------------------------------
 */

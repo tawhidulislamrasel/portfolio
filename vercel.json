@@ -10,10 +10,6 @@
       "use": "@vercel/static"
     },
     {
-      "src": "public/storage/**",
-      "use": "@vercel/static"
-    },
-    {
       "src": "public/favicon.ico",
       "use": "@vercel/static"
     },
@@ -26,10 +22,6 @@
     {
       "src": "/build/(.*)",
       "dest": "/public/build/$1"
-    },
-    {
-      "src": "/storage/(.*)",
-      "dest": "/public/storage/$1"
     },
     {
       "src": "/favicon.ico",

@@ -263,4 +263,24 @@ class PortfolioTest extends TestCase
         $deleteResponse->assertRedirect(route('admin.projects.index'));
         $this->assertDatabaseMissing('projects', ['id' => $project->id]);
     }
+
+    /** @test */
+    public function storage_asset_delivery_serves_uploaded_files()
+    {
+        $testFileDir = storage_path('app/public/test_assets');
+        if (!is_dir($testFileDir)) {
+            mkdir($testFileDir, 0777, true);
+        }
+
+        $testFilePath = $testFileDir . '/sample.txt';
+        file_put_contents($testFilePath, 'Storage file content');
+
+        $response = $this->get('/storage/test_assets/sample.txt');
+        $response->assertStatus(200);
+        $this->assertEquals('Storage file content', file_get_contents($response->getFile()->getPathname()));
+
+        if (file_exists($testFilePath)) {
+            unlink($testFilePath);
+        }
+    }
 }

@@ -40,6 +40,9 @@ $directories = [
     $tmpStorage . '/app/public/branding',
     $tmpStorage . '/app/public/resumes',
     $tmpStorage . '/app/public/posts',
+    $tmpStorage . '/app/public/projects',
+    $tmpStorage . '/app/public/projects/gallery',
+    $tmpStorage . '/app/public/media',
 ];
 
 foreach ($directories as $dir) {

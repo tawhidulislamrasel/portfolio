@@ -1,6 +1,11 @@
 <?php
 
-// 1. Prepare required writable /tmp directory structure for Vercel Lambda environment
+// 1. Set VERCEL environment flag
+putenv('VERCEL=1');
+$_ENV['VERCEL'] = '1';
+$_SERVER['VERCEL'] = '1';
+
+// 2. Prepare required writable /tmp directory structure for Vercel Lambda environment
 $tmpStorage = '/tmp/storage';
 $directories = [
     $tmpStorage,
@@ -20,7 +25,7 @@ foreach ($directories as $dir) {
     }
 }
 
-// 2. Prepare SQLite Database in /tmp
+// 3. Prepare SQLite Database in /tmp
 $tmpDb = '/tmp/database.sqlite';
 $sourceDb = __DIR__ . '/../database/database.sqlite';
 if (!file_exists($tmpDb) || filesize($tmpDb) === 0) {
@@ -31,11 +36,11 @@ if (!file_exists($tmpDb) || filesize($tmpDb) === 0) {
     }
 }
 
-// 3. Set Essential Vercel Serverless Environment Variables
+// 4. Set Essential Vercel Serverless Environment Variables
 $envVars = [
     'APP_KEY' => getenv('APP_KEY') ?: 'base64:pFt8202m8C+z3iaeg0u2ts0+GQRua3nVhN0SGqVWeQc=',
     'APP_ENV' => getenv('APP_ENV') ?: 'production',
-    'APP_DEBUG' => getenv('APP_DEBUG') ?: 'false',
+    'APP_DEBUG' => getenv('APP_DEBUG') ?: 'true',
     'VIEW_COMPILED_PATH' => $tmpStorage . '/framework/views',
     'APP_SERVICES_CACHE' => $tmpStorage . '/services.php',
     'APP_PACKAGES_CACHE' => $tmpStorage . '/packages.php',
@@ -54,5 +59,5 @@ foreach ($envVars as $key => $value) {
     $_SERVER[$key] = $value;
 }
 
-// 4. Forward to Laravel front controller
+// 5. Forward to Laravel front controller
 require __DIR__ . '/../public/index.php';
